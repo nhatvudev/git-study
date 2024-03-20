@@ -1,0 +1,66 @@
+The three trees:
+    - Working directory
+    - Staging Index
+    - Commit History
+
+heads: In Git, a head is a ref that points to the tip (latest commit) of a branch. You can 
+view your repository’s heads in the path .git/refs/heads/. In this path you will find one file 
+for each branch, and the content in each file will be the commit ID of the tip (most recent 
+commit) of that branch.
+
+Pointers:
+    - Branch Pointer: Every branch name is a pointer to tip of the branch.
+
+    - "HEAD" is a special ref that points to the commit you are currently working on. It has 
+    2 states:
+        + Attached: it is pointing to a branch pointer.
+        + Detached: it is pointing a commit which is not pointed by any branch pointer.
+
+Upstream branches
+    An upstream branch is a branch tracked on the remote repository by your local remote branch 
+        (also called the remote tracking branch).
+
+
+Tổng quan về cấu trúc của GIT 
+    https://viblo.asia/p/nhung-dieu-khong-phai-ai-cung-noi-cho-ban-ve-git-part-1-1VgZvwkYlAw
+
+    Để trả lời được các câu hỏi này mình cần nhắc lại với mọi người rằng khi làm việc với git có 4 nơi cần được ghi nhớ:
+        1 là working directory ( hay cây thư mục nơi bạn làm việc, folder mà tại đó bạn trực tiếp mở lên từ editor và code trên đó)
+        2 là staged area hay index, là nơi bạn vứt những file đã thay đổi ở working directory vào trước khi thực hiện commit ( mục đích có lẽ là để xem xét lại những thay đổi chắc chắn đã đúng hay chưa, cân nhắc lần cuối trước khi commit).
+        3 là local repo ( hay cái kho lưu trữ toàn bộ code, các commit, branch,... của chúng ta)
+        và 4 là remote repo, có thể hiểu là 1 kho chứa được vứt lên mây với mục đích chia sẻ, lưu trữ,...
+
+
+What content is important in a commit?
+    => changing commit or merging commit:
+        - Changing commit: what is changes
+        - Merging commit: merge from which commit & which content is choosed for resolving.
+    * Remarks:
+        - If you merge branch A to branch B at a moment, commit history tree of branch B shall include commits from branch A. 
+        - If you cherry-pick a commit to branch B, git only copy contents of commit. That means that branch B doesn't contains commit which is cherry-picked
+
+
+============================================================================================================
+
+https://code.tutsplus.com/tutorials/what-are-the-three-trees-in-git--cms-28188
+
+What Are the Three Trees?
+
+To better understand how Git is operating, we can use the metaphor of the three trees. These trees are different collections of files. 
+
+For the workflow of adding and retrieving commits, Git uses three different versions of files:
+
+    the working directory
+    the index
+    something called "HEAD" for creating and for retrieving commits
+
+
+Different Versions of Files
+
+Files whose contents can be changed are in your working directory. Files placed in your index are getting prepared to be packaged into a commit object. These commits are saved in your Git repository. 
+
+Files that have already been committed are compressed files. They are hashed through a SHA-1, a cryptographic hash function. Both file versions in the index and commit themselves are saved in the Git repo, which is simply a .git rectory at the root level of your wrap.
+
+The working directory represents the actual files on your computer's file system that are available to your code editor to apply changes. The working directory is a version of a particular commit, a particular snapshot of a project that you checked out. It is the version of your Git history that HEAD is pointing at, at any given moment.
+
+"Checked out" means that you have the decompressed versions of files that were pulled out of your Git repository, available for editing. The index represents what is being tracked. You could also say that it's a list of all the files that are relevant for your Git repository. 

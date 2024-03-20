@@ -1,0 +1,53 @@
+https://stackoverflow.com/questions/22082307/git-switch-branch-without-discarding-local-changes
+
+There are a bunch of different ways depending on how far along you are and which branch(es) you 
+want them on.
+
+Let's take a classic mistake:
+
+    $ git checkout master
+    
+... pause for coffee, etc ...
+... return, edit a bunch of stuff, then: oops, wanted to be on develop
+So now you want these changes, which you have not yet committed to master, to be on develop.
+
+If you don't have a develop yet, the method is trivial:
+
+    $ git checkout -b develop
+This creates a new develop branch starting from wherever you are now. Now you can commit and the 
+new stuff is all on develop.
+
+You do have a develop. See if Git will let you switch without doing anything:
+
+    $ git checkout develop
+This will either succeed, or complain. If it succeeds, great! Just commit. If not (error: Your 
+local changes to the following files would be overwritten ...), you still have lots of options.
+
+The easiest is probably git stash (as all the other answer-ers that beat me to clicking post said). 
+Run git stash save or git stash push,1 or just plain git stash which is short for save / push:
+
+    $ git stash
+This commits your code (yes, it really does make some commits) using a weird non-branch-y method. 
+The commits it makes are not "on" any branch but are now safely stored in the repository, so you can 
+now switch branches, then "apply" the stash:
+
+    $ git checkout develop
+Switched to branch 'develop'
+    $ git stash apply
+
+If all goes well, and you like the results, you should then git stash drop the stash. This deletes 
+the reference to the weird non-branch-y commits. (They're still in the repository, and can sometimes 
+be retrieved in an emergency, but for most purposes, you should consider them gone at that point.)
+
+The apply step does a merge of the stashed changes, using Git's powerful underlying merge machinery, 
+the same kind of thing it uses when you do branch merges. This means you can get "merge conflicts" 
+if the branch you were working on by mistake, is sufficiently different from the branch you meant 
+to be working on. So it's a good idea to inspect the results carefully before you assume that the 
+stash applied cleanly, even if Git itself did not detect any merge conflicts.
+
+Many people use git stash pop, which is short-hand for git stash apply && git stash drop. That's 
+fine as far as it goes, but it means that if the application results in a mess, and you decide you 
+don't want to proceed down this path, you can't get the stash back easily. That's why I recommend 
+separate apply, inspect results, drop only if/when satisfied. (This does of course introduce
+another point where you can take another coffee break and forget what you were doing, come back, 
+and do the wrong thing, so it's not a perfect cure.)

@@ -1,0 +1,46 @@
+https://stackoverflow.com/questions/14486122/how-does-git-merge-after-cherry-pick-work
+
+Questions
+*********
+    Let's imagine that we have a master branch.
+
+    Then we create a newbranch
+
+        git checkout -b newbranch
+
+    and make two new commits to newbranch: commit1 and commit2
+
+    Then we switch to master and make cherry-pick
+
+        git checkout master
+        git cherry-pick hash_of_commit1
+
+    Looking into gitk we see that commit1 and its cherry-picked version have different 
+    hashes, so technically they are two different commits.
+
+    Finally we merge newbranch into master:
+
+        git merge newbranch
+
+    and see that these two commits with different hashes were merged without problems 
+    although they imply that the same changes should be applied twice, so one of them 
+    should fail.
+
+    Does git really do a smart analysis of commit's content while merging and decide that 
+    changes shouldn't be applied twice or these commits are marked internally as linked 
+    together?
+
+
+Short answer
+************
+    Don't worry, Git will handle it.
+
+Long answer
+***********
+    Unlike e.g. SVN1, Git does not store commits in delta format, but is snapshot-based2,3. 
+    While SVN would naively try to apply each merged commit as a patch (and fail, for 
+    the exact reason you described), Git is generally able to handle this scenario.
+
+    When merging, Git will try to combine the snapshots of both HEAD commits into a new 
+    snapshot. If a portion of code or a file is identical in both snapshots (i.e. because 
+    a commit was already cherry-picked), Git won't touch it.

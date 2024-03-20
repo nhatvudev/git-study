@@ -1,0 +1,9 @@
+https://git-scm.com/docs/git-fetch
+
+
+--depth=<depth>
+
+    Limit fetching to the specified number of commits from the tip of each remote 
+    branch history. If fetching to a shallow repository created by git clone with 
+    --depth=<depth> option (see git-clone[1]), deepen or shorten the history to the 
+    specified number of commits. Tags for the deepened commits are not fetched.

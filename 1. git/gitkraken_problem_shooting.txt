@@ -1,0 +1,11 @@
+1. Why GitKraken doesn't show branch/commit history
+    - After clone source code by following commands:
+        > repo init -u ssh://NhatVTM@scm.vsmart.net:29418/platform/manifest -b VSM-WT-2019 -m vsm_v620a_sdm6150_2019.spf.1.0_1st-ga-dev.xml --repo-url=ssh://NhatVTM@scm.vsmart.net:29418/tools/repo --no-repo-verify --depth=1
+        > repo sync -d -c -q --force-sync --jobs=8 --no-tags
+        
+    - If we open any repository (git) by GitKraken -> cannot see any branch/commit history.
+    
+    - Reason is --depth=1 and --no-tags.
+    
+    - Solution: get in the project and
+        > git fetch --unshallow

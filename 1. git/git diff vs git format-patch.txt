@@ -1,0 +1,9 @@
+https://stackoverflow.com/questions/4624127/what-is-the-difference-between-git-format-patch-and-git-diff
+
+
+
+A patch created with git format-patch will also include some meta-information about the commit (committer, date, commit message, ...) and will contains diff of binary data. Everything will be formatted as a mail, so that it can be easily sent. The person that receive it can then recreate the corresponding commit with git am and all meta-data will be intact. It can also be applied with git apply as it is a super-set of a simple diff.
+
+A patch crated with git diff will be a simple diff with context (think diff -u). It can also be applied with git apply but the meta-data will not be recreated (as they are not present).
+
+In summary, git format-patch is useful to transmit a commit, while git diff is useful to get a diff between two trees.

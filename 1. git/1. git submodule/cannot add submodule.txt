@@ -1,0 +1,17 @@
+Reference:
+    https://stackoverflow.com/questions/20929336/git-submodule-add-a-git-directory-is-found-locally-issue
+
+
+Issue:
+    - I had a git submodule before I deleted it. Then I add submodule again by another url. Example:
+            $ git submodule add 'https://tfs.vingroup.net/vsmart/E-COCKPIT/_git/vfrpc' pkg/vfrpc
+    
+    => Cannot add submodule and following text shows up:
+            A git directory for 'pkg/vfrpc' is found locally with remote(s):
+
+Solution:
+
+    - remove the folder of the submodule.
+    - remove from .gitmodules
+    - rm -rf .git/modules/myproject
+    - retry the above steps to add it again.

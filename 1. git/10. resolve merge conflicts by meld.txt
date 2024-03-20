@@ -1,0 +1,28 @@
+Problems
+********
+    
+    Assume that you commit some changes from local. Then, you pull the source code,
+    but someone has pushed some changes to the remote respository before. You will
+    have conflicts.
+
+
+Solution
+********
+
+    In this document, I set up meld as my merge tool
+
+    - Install "meld" application.
+
+    - Set up merge tool:
+        $ git config --global merge.tool "meld"
+
+    - Overview merged files by:
+        $ git log --merge
+
+    - Merge and open merge tool:
+        $ git merge
+        $ git mergetool
+
+    => Meld will display comparison of conflict files pair by pair.
+
+    - Resolve the conflicts by Meld. Then commit and push.

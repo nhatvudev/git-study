@@ -1,0 +1,13 @@
+https://apple.stackexchange.com/questions/55875/git-auto-complete-for-branches-at-the-command-line
+
+I got that from this url:
+
+curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash
+
+No need to worry about what directory you're in when you run this as your home directory(~) is used with the target.
+
+Then I added to my ~/.bash_profile file the following 'execute if it exists' code:
+
+if [ -f ~/.git-completion.bash ]; then
+  . ~/.git-completion.bash
+fi

@@ -1,0 +1,17 @@
+For example:
+    git log --pretty=oneline
+
+Output:
+
+7bd044a9deff29b4471af88a2ee041cc90f58527 (HEAD -> Add_mhu_tbox_fota_sequences, origin/Add_mhu_tbox_fota_sequences) First commit of MHU_MANAGER architecture document
+7f9146802f4871ab4d0f40b419dfb92cb00a9dc4 Changes interfaces
+14ba451dbd2f688e408a2c563dad2967faf4b1e0 Merge branch 'Add_mhu_tbox_fota_sequences' of ssh://10.128.49.26:7999/tbox/tbox_development into Add_mhu_tbox_fota_sequences
+13525878fd9f017a84c91dfa6e7f3f7c83396d07 Update SIDL accoridng to HMI
+b0d5b5d4581a39b6b6dbb68a5ea54fe65cda6800 Add initial version of connected service
+2797f6088f9441d0d916aeeeafad330a289e5859 (origin/testbranch) Modify after meeting
+
+Meaning:
+    - HEAD is pointing to branch Add_mhu_tbox_fota_sequences
+    - local Add_mhu_tbox_fota_sequences is pointing to 7bd044a9deff29b4471af88a2ee041cc90f58527
+    - remote origin, branch Add_mhu_tbox_fota_sequences is pointing to 7bd044a9deff29b4471af88a2ee041cc90f58527
+    - remote origin, branch testbranch is pointing to 2797f6088f9441d0d916aeeeafad330a289e5859

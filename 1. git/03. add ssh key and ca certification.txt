@@ -1,0 +1,44 @@
+1. Overview
+***********
+    If you access the git server by ssh, you should create and create ssh key.
+    If you access it by http, maybe you need to add ca certifice for your git.
+
+2. How to do
+************
+    2.1. Create and add ssh key
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        - Before generating a new SSH key pair first, check for existing SSH keys on your Ubuntu client machine. 
+                You can do that by running the following ls command :
+
+            $ ls -l ~/.ssh/id_*.pub
+
+        - Generate a new 4096 bits SSH key pair with your email address as a comment by typing:
+
+            $ ssh-keygen -t rsa -b 4096 -C "your_email@domain.com"
+
+        - The output will look something like this:
+
+        - output files for Ubuntu are in:
+            ~/.ssh
+
+        - You need to add the content in your public key (id.rsa.pub) to the website of server. (no need to add
+            pc name at the end of the public key.)
+
+        Ex: 
+
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1B8SA4dYpRB1NDSLZomFJhufkfCP/d80O05pVYdovqTek53V4x/i7Lt0Xkq+UzyWsWMbB3oEY
+mjYz8zStXa+slGbV2FZdaPncX/i0PYkCCBSIFXVbD1DliMpeN2fzfRiTxf7sed1xyVDYNFRdvFcXh0D/4kVX0PCmA5SJmy68Ud10MJko7X8ndqgGm
+ILq8dYdBLsUAgF63iuh9+3Eg2gQ49ARn2F+7GTcjdMdLjipJjIm7vW5/2g0wsLtsUWLO6JIitxRNleS/iuzQa7o+M7jiGIof1yzUB+jnjAqjrnGay
+vSE398pkAg6Bikk5obdpjYwlYy2vKlqPV2P3TrVWqP
+     
+     2.2. Get and add CA certificate
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        - Get the self signed certificate
+            $ openssl s_client -connect tfs.vsmart.net:443
+
+        - Put output into some file (e.g. ~/cacerts/cert.pem)
+
+        - Set git to trust this certificate using http.sslCAInfo parameter:
+            $ git config --global http.sslCAInfo /home/nhatvtm/cacerts/cert.pem

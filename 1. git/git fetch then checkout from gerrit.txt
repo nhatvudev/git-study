@@ -1,0 +1,28 @@
+1. If the module is already in local
+************************************
+
+      - For example, following commit:
+            https://scm.vsmart.net/android/#/c/vendor/vinsmart/common/+/37371/
+
+      - At top-right cornor, click "Download" -> we will see
+            Checkout: git fetch ssh://NhatVTM@scm.vsmart.net:29418/vendor/vinsmart/common refs/changes/71/37371/6 && git checkout FETCH_HEAD
+
+      - Go to .../android/vendor/vinsmart/common
+      - To fetch and checkout exactly, input following command
+            $ git fetch ssh://NhatVTM@scm.vsmart.net:29418/vendor/vinsmart/common refs/changes/71/37371/6 && git checkout FETCH_HEAD
+
+
+2. If the module is not in local
+********************************
+      - For example, following commit
+            https://scm.vsmart.net/android/#/c/vendor/vinsmart/packages/services/VTzService/+/40122/
+
+      - At first, create and go to .../android/vendor/vinsmart/packages/services/
+      - Input following command to clone
+            $ git clone ssh://NhatVTM@scm.vsmart.net:29418/vendor/vinsmart/packages/services/VTzService
+
+      - At top-right cornor, click "Download" -> we will see
+            Checkout: git fetch ssh://NhatVTM@scm.vsmart.net:29418/vendor/vinsmart/packages/services/VTzService refs/changes/22/40122/2 && git checkout FETCH_HEAD
+
+      - Go to .../android/vendor/vinsmart/packages/services/VTzService input following command
+            $ git fetch ssh://NhatVTM@scm.vsmart.net:29418/vendor/vinsmart/packages/services/VTzService refs/changes/22/40122/2 && git checkout FETCH_HEAD

@@ -1,0 +1,1007 @@
+Notes: 
+                  
+      - There are 3 groups of repository:
+            + Only one current repository (local).
+            + Fetched repositories (local).
+            + Remote server repositories (server).
+
+      - There are 3 important trees:
+            + current working tree
+            + staged index tree
+            + commit tree
+
+      - Following is some "key word" which shall be used in the examples.
+            repo: alias name of a repository. Its default name is "origin"  We can change this 
+                  name at local without affecting the remote repository.
+
+            BRANCH: some name of a branch.
+
+            commit_id: commit id which specifies a commit.
+
+            commit_ref: is one of the followings
+                  + HEAD pointer.
+                  + commit id.
+                  + branch name (tip of local branch).
+                  + repo/BRANCH (tip of a fetched remote BRANCH)
+                  + commit_ref^
+                  + commit_ref~n
+
+            _commit_: a specific commit (commit_ref but not branch name).
+
+            tree: the top of tree is pointed to by one of 'commit_ref" type.
+
+            trees: a group of trees
+                  + tree1 tree2                 # commits in tree1a or tree2b
+                  + ^tree1 ^tree2 tree3 tree4   # commits in tree3 or tree4 but not in tree1 nor tree2
+
+            commit_range:
+                  + commit_ref1..commit_ref2    # in (commit_ref1, commit_ref2]
+                  + ^tree1 tree2                # tree1 is base of tree2 => (tree1, tree2]
+
+            commits: group of commits
+                  + commit_ref                  # group of one commit
+                  + trees
+                  + commit_range
+
+            paths: paths of specific files or folders
+
+      - single commit ref::
+            commit_ref~ or commit_ref^
+                  commit right before commit_ref
+
+            commit_ref~2
+                  2 position before commit_ref
+
+      - multi commit ref:
+            ^commit_ref1 commit_ref2: 
+                  can trace back from commit_ref2 but cannot trace back from commit_ref1
+
+      - Parent of a commit:
+            commit_ref^
+                  only parent of commit_ref
+
+            commit_ref^!
+                  all parents of commit_ref
+
+      - Rule to use repo and BRANCH in git command:
+            + (repo and BRANCH is not defined) => repo and BRANCH which are equivelant to current 
+                  local repository and branch.
+            + BRANCH: branch BRANCH of current local repository.
+            + repo/BRANCH: branch BRANCH of the fetched repository "repo".
+            + repo BRANCH: BRANCH of the remote repository "repo" (on server)
+
+
+
+====================================================================================
+            An optional rule for easy working with git
+
+- Every manual change in every repository should be started at working directory, then
+      + "git add" it to index.
+            => undo by "git rm --cached"
+      + "git commit" it to local repository.
+            => undo by "git reset HEAD~1"
+      + "git push" it to remote repository.
+
+
+====================================================================================
+            Some common commandgroups to practise
+            =====================================
+
+git config
+git init
+git clone
+git remote
+
+git status
+git show
+git log
+git shortlog
+git tag
+git ls-remote
+git checkout
+git branch
+git rebase
+git cherry-pick
+
+git fetch
+git merge
+git pull
+git add
+git rm
+git reset
+git restore
+git clean
+git commit
+git revert
+git push
+
+git diff
+git format-patch
+git apply
+git blame
+git stash
+
+git submodule
+
+git mergetool
+git difftool
+
+====================================================================================
+            Some common commands for me to practise
+            =======================================
+            
+git config --list
+git config [--global] (user.name "NhatVTM" | user.email "nhat.tm.vu@dektech.com.au"
+    | core.editor "code --wait")
+git config (--get | --unset) (user.name | user.email
+    | remote.origin.url | remote.origin.fetch
+    | branch.master.remote | branch.master.merge)
+git config --edit
+
+git init
+
+git clone https://github.com/user/repository.git -b BRANCH --depth=1 -o origin
+git clone ssh://NhatVTM@scm.vsmart.net:29417/project_path
+git clone ssh://nhatvtm@bitbucket.org/owner/project
+git clone git@gitlab.vsmart.net:security/project_path 
+git clone git@github.com:nhatvtm/project_path
+
+git remote add repo ssh://NhatVTM@scm.vsmart.net:29417/project_path
+git remote -v
+git remote update
+git remote rename repo new_name
+git remote rm repo
+
+git status
+
+git show [--name-only] commit_ref
+
+git log [--graph] [--oneline|--name-only|-p
+      |--pretty=(oneline|fuller|format:"%h - %an - %ad - %s")]
+git log [trees|--all] [--author="nhatvtm"] [--first-parent] [--merges] [-10]# HEAD tree is default
+git log [--full-history] [--diff-filter=[A][M][R][D]] [-- paths] 
+git log [--after="2021-12-20"] [--before="2021-12-21"] [--grep="a part of message"]
+git log -L 123,+1:src/file.cpp
+
+git shortlog (-sne | --summary --numbered --email)
+
+git tag [-a] tag_name [commit_ref] [-m "message"]
+git tag
+git tag -d tag_name
+
+git ls-remote --tags
+
+git checkout (BRANCH|_commit_|-- paths)
+git checkout [BASE] -b NEW_BRANCH
+
+git branch NEW_BRANCH
+git branch [-r | -a] [-v | -vv] [--contains commit_ref]
+git branch [LOCAL_BRANCH] -m NEW_NAME
+git branch [LOCAL_BRANCH] (--unset-upstream | -u repo/BRANCH)
+git branch LOCAL_BRANCH (-d | -D)
+
+git rebase [--rebase-merges] BASE [commit_ref]
+git rebase (--continue|--skip|--abort|--quit)
+
+git cherry-pick [-n] (_commit_|commit_range)
+git cherry-pick (--continue|--skip|--abort|--quit)
+
+git fetch [repo] [BRANCH] [--depth=10|--unshallow]
+
+git merge [--no-ff] [[repo/]BRANCH]
+git merge (--continue|--abort)
+
+git pull [[repo] BRANCH] [--depth=10|--unshallow]  # default is 'origin' repo
+
+git add paths
+
+git rm [-r] [--cached] paths
+
+git clean [-n] (-fd|-xfd|-Xfd)
+
+git reset -- paths                                  # unstaged all or specific files in index
+git reset [--soft|--mixed|--hard] [commit_ref]  # move HEAD to commit_ref and udpate the trees
+                                                    # if no commit_ref => keep HEAD.
+                                                    # --mixed is default.
+                                                    
+git restore [--worktree] [--staged] [-s tree] -- paths
+
+git commit [--amend] [-m "message"]
+
+git revert [-n] _commit_ [-m (1|2)]
+git revert [-n] commit_range
+git revert (--continue|--skip|--abort|--quit)
+
+git push [[repo] LOCAL_BRANCH[:REMOTE_BRANCH]] [--force] [--follow-tags]
+git push repo HEAD:refs/for/BRANCH
+git push [-u | -d] repo BRANCH
+git push [-d] repo tag_name
+
+git diff [--name-only] [--cached|commit_ref1 [commit_ref2]|commit_ref^!|--check] [-- paths]
+
+git format-patch -p1 commit_ref
+git format-patch -p10 --stdout > file.patch
+
+git apply file.patch
+
+git blame -L 587,+1 [commit_ref] file.cpp
+
+git stash [push] [-m "message"]
+git stash list
+git stash (show [-p]|apply | drop | pop) (stash@{0} | 0)
+git stash clear
+
+git submodule add url [module_path]
+git submodule
+git submodule update --init [--recursive]
+git submodule deinit module_path
+
+git difftool [--dir-diff] [--cached|commit_ref1 [commit_ref2]|commit_ref^!] 
+
+Repo commands
+*************
+      repo init -u ssh://NhatVTM@scm.vsmart.net:29418/manifest_project -b MANIFEST_BRANCH -m manifest_file.xml \
+--repo-url=ssh://NhatVTM@scm.vsmart.net:29418/repo_path --no-repo-verify --depth=1
+
+      repo sync
+      repo sync platform/frameworks/base
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Reference
+*********
+      Search for "Git Commands - Setup and Config"
+
+
+git config
+**********
+      $ git config --list
+      $ git config --global user.name "NhatVTM";
+      $ git config --global user.email "v.nhatvtm@vinsmart.net.vn"
+      $ git config --global core.editor "code --wait"
+      $ git config --global core.editor "gedit --wait --new-window" 
+      $ git config --global core.editor "open -e -W -n"
+      $ git config --get remote.origin.url
+      * Remarks:
+            - if no --global option => only apply to current project
+
+
+      $ git config --edit
+      $ git config --global --edit
+      $ git config --global http.sslVerify true
+      $ git config --global --unset http.sslverify
+      $ git config --global http.sslCAInfo /home/nhatvtm/cacerts/cert.pem
+
+git init
+********
+      $ git init
+
+git clone
+*********
+      Clone and use "origin" as repo name
+            $ git clone https://github.com/user/repository.git
+            $ git clone ssh://NhatVTM@scm.vsmart.net:29418/vendor/vinsmart/custom -b VSM_V420_SDM450_2018 --depth=1
+            $ git clone git@gitlab.vsmart.net:security/VTzTestApp.git
+
+      Clone and use a specific name
+            $ git clone <url> -o repo_name
+
+      *Remarks: 3rd command uses ssh protocol.
+
+git remote
+**********
+      List
+            $ git remote -v
+
+      Add a remote repo
+            $ git remote add <remote_repository> http://....
+
+      update all of your branches set to track remote ones
+            $ git remote update
+      
+      Rename a repository
+            $ git remote rename <remote_repository> <new_name>
+
+      Delete a remote repo
+            $ git remote rm <remote_repositor>
+
+      Set remote repo to fetch
+            $ git remote set-url <fetching_repo> <fetch_url>
+
+      Set remote repo to push
+            $ git remote set-url --push <pushed_repo> <push_url>
+
+      * Remarks:
+            <fetching_repo> and <pushed_repo> are often the same. Ex: origin.
+      
+
+git status
+**********
+      Display current status of the your git folder.
+
+git log
+*******
+      This command display commits which are reachable by a given commit. If the commit
+            is not given -> display commits which are reachable by HEAD.
+
+      - Display commits which are reachable by commit refered by HEAD.
+            $ git log
+
+      - Display commits with only one line of information for every commit
+            $ git log --oneline
+
+      - Display short hash, author name, date and title
+            $ git log --pretty=format:"%h - %an -  %ad - %s"
+
+      - Display commits which are reachable by commit refered by HEAD, and can explain what
+                  is changed in specific files
+            $ git log -- paths
+
+      - Display commits which are reachable by commit_ref2 but not commit_ref1
+                  $ git log commit_ref2 ^commit_ref1
+            or
+                  $ git log ^commit_ref1 commit_ref2
+            or
+                  $ git log commit_ref1..commit_ref2
+      *Remarks:
+            + "commit_ref1..commit_ref2" is shorcut of "^commit_ref1 commit_ref2"
+
+
+      - Display graph of commit history
+            $ git log --graph
+
+      - Look for commits by a part of commit message
+            $ git log --grep="a part of commit message"
+
+      - Display only 2 commits:
+            $ git log -2
+
+      - Display history of a line of a file:
+                  $ git log -L <line>,<range>:<file>
+            Ex:
+                  $ git log -L 123,+1:src/file.cpp
+
+      - Display changes of files:
+                  $ git log -p
+            E.g:
+                  $ git log -p -- file1.cpp
+
+      - Display only main branch perspective, skipping commits that come from merge branches
+            $ git log --first-parent
+            
+
+git show
+********
+      Show details of a commit
+            $ git show commit_ref
+
+git tag
+*******
+      list all tags at local
+            $ git tag
+
+      add a tag to a commit
+            annotated type
+                  $ git tag -a <tag_name> [commit_ref] [-m "message"]
+
+            light way type
+                  $ git tag <tag_name> [commit_ref]
+
+            * Remarks:
+                  - HEAD is default commit_ref.
+                  - annoted type requires a message. If -m "message" is dismissed, 
+                  the editor will be open.
+                  - lightweight type doesn't require a message or '-a'. Else, it 
+                  shall become annoted type.
+
+      push a tag to a remote repo
+            git push <remote_repo> <tag_name>
+
+      delete a local tag
+            git tag -d <tag_name>
+
+      delete a tag from a remote repo
+            git push -d origin <tag_name>
+
+List tags in remote repository
+******************************
+      git ls-remote --tags <repository>
+
+git checkout
+************
+      Uses:
+            - Updates files in the working tree to match the version in the index or the specified 
+            tree. 
+            - If no pathspec was given, git checkout will also update HEAD to set the specified 
+            branch as the current branch.
+
+      $ git checkout [-b] BRANCH
+      Update files in working tree and index tree to match a branch in the local repository and point 
+      HEAD to the branch.
+
+      $ git checkout specific-commit-id
+      Update files to match the commit in the local repository and point HEAD to it. (HEAD shall be 
+      detached from any branch). Local modifications will be kept.
+
+      $ git checkout -- paths
+      Update the files in working tree to match content in index tree.
+
+      $ git checkout tree -- [paths]
+      Update the files in both working tree and index tree to match content in 'tree'.
+
+      $ git checkout FETCH_HEAD
+      Update files to match correspoding branch in the corresponding repository which was fetched and
+      point HEAD to the branch.
+
+      $ git checkout -- file_path1 file_path2 ...
+      Update the files to match the commit which is pointed by HEAD.
+
+      * Remarks: 
+            - Following command:
+                  $ git checkout xyz
+                  => Will checkout file xyz if the file exits, else it will checkout branch xyz.
+            - To seperate file path of checkout command we should use --.
+            - For example, if you have a branch xyz and a file xyz
+                  $ git checkout xyz --
+                  => checkout branch
+                  $ git checkout -- xyz
+                  => checkout file
+
+git fetch
+*********
+
+      Basic syntax
+            $ git fetch [<remote_repo>] [<branch>]
+
+      Fetch with depth = 10:
+            $ git fetch [<remote_repo>] [<branch>] --depth=10
+
+      Fetch, filtering by tag:
+            $ git fetch -tags
+      
+      After clone with depth=n, use following command will fetch all
+            $ git fetch --unshallow
+
+      Fetch a refspec from a url:
+            $ git fetch <url> <refspec>
+
+
+git merge
+*********
+      Merge a fetched branch <fetched_repository>/<branch> to current branch.
+            $ git merge <fetched_repository>/<branch>
+
+      Merge another local branch to current branch
+            $ git merge <branch>
+
+      merge the remote-tracking branches that the current branch is configured to use as its
+      upstream. 
+            $ git merge
+
+      During merging, conflicts can happen. You can 
+            cancel merging and reset everything as before merging:
+                  $ git merge --abort
+            or you can quit merging but keep changes
+                  $ git merge --quit
+            or you can resolve coflicts by yourself. After resolving conflicts, you can continue
+                  $ git merge --continue
+
+      merge without fast-forward
+            $ git merge --no-ff <branch>
+      
+
+git pull 
+********
+
+      Basic syntax
+      ~~~~~~~~~~~~
+            $ git pull [[<remote_repo>] <branch>] [--depth=10 | --unshallow]
+
+      git pull
+      ~~~~~~~~
+            - as same as
+                  $ git fetch
+                  $ git merge
+
+      git pull <branch>
+      ~~~~~~~~~~~~~~~~~
+            * It will fetch the branch then merge the branch to current branch.
+
+            - First it will do
+                  $ git fetch <branch>
+
+            - Assume that the fetched branch is from remote repo "origin", then it will do
+                  $ git merge origin/<branch>
+
+      git pull <remote_repo> <branch>
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            - as same as
+                  $ git fetch <remote_repo> <branch>
+                  $ git merge <remote_repo>/<branch>
+
+
+
+git add (added changes of new/modified/deleted files to index)
+**************************************************************
+      $ git add <file>
+      $ git add <directory>
+
+git rm
+******
+      Remove files both from index and working directory
+            $ git rm <file>
+
+      Remove files from index but keep it in working directory.
+            $ git rm --cached <file>
+
+      If you want to remove a whole folder, you need to delete all files in it recursively.
+            $ git rm -r --cached <folder>
+
+      * Remarks:
+            - if you want to remove files from working directories but keep them in index 
+                  => use "/bin/rm".
+            - "git add" is used to added changes of file to index while "git rm" is used to remove
+                  files (not only changes of files). It means "git rm --cached" will untrack the 
+                  files.
+            - After untracking files by "git rn --cached", we can track the files a gain by "git 
+                  add".
+            - Changes in index should be commited by "git comimt". Else, the local repository won't 
+                  change.
+
+To delete a file from repository, we have 2 methods
+***************************************************
+      method 1: delete the file, then, git add and git commit
+            $ rm file
+            $ git add file
+            $ git commit
+
+      method 2: git rm, then, git commit
+            // At first, your file in working directory must be as same as the file in index.
+            $ git rm file
+            $ git commit
+
+git commit
+**********
+      $ git commit
+      $ git commit -m "commit message"
+      $ git commit --amend
+      $ git commit --amend -m "commit message"
+
+git push
+********
+      Push current branch to a branch in remote repository in the config.
+            $ git push
+
+      Push to certain remote repository and branch.
+            $ git push <repository> <branch>
+
+      Push new branch which is not in remote repository
+                  $ git push -u <repository> <branch>
+            Example:
+                  $ git push -u origin feature/243898-modify_tbox_mhu_if_for_fota
+      
+      delete obsolete remote branches
+            $ git push origin :deprecated-branch
+
+      You can push your commits and tags in one command. E.g:
+            $ git push --follow-tags
+
+git branch
+**********
+      show local branches
+            $ git branch
+      
+      show remote branches
+            $ git branch -r
+      
+      show local and remote branches
+            $git branch -a
+
+      show every branch with its last commit id
+            $ git branch -v
+            $ git branch -r -v
+            $ git branch -a -v
+
+      show every branch with its last commit id & upstream branch (if exists)
+            $ git branch --v
+            ...
+      
+      create a new branch but still in last branch
+            $ git branch NEW_BRANCH
+      
+      Change current local branch name into new name
+            $ git branch -m NEW_NAME
+      
+      Change specific local branch name to new branch name
+                  $ git branch LOCAL_BRANCH -m NEW
+            or
+                  $ git branch -m LOCAL_BRANCH NEW
+
+      Delete specific local branch
+                  $ git branch LOCAL_BRANCH -d 
+            or
+                  $ git branch -d LOCAL_BRANCH
+            or in case if the local branch hasn't been pushed nor merged yet
+                  $ git branch LOCAL_BRANCH -D
+            or
+                  $ git branch -D LOCAL_BRANCH
+      
+      Search for branches which contain "-4.9" in their name.
+            $ git branch -r | grep "-4.9"
+      
+      unset upstream for branch <BRANCH>
+            $ git branch --unset-upstream <LOCAL_BRANCH>
+      
+      unset upstream for current branch
+            $ git branch --unset-upstream
+     
+      set upstream to fetched remote branch <BRANCH> for current local branch
+                  $ git branch -u <repo>/<BRANCH>
+            or
+                  $ git branch --set-upstream-to=<repo>/<REMOTE_BRANCH>
+      
+      set upstream to fetched remote branch <BRANCH> for local branch <LOCAL_BRANCH>
+                  $ git branch <LOCAL_BRANCH> -u <repo>/<REMOTE_BRANCH>
+            or
+                  $ git branch <LOCAL_BRANCH> --set-upstream-to=<repo>/<REMOTE_BRANCH>
+      
+
+git delete remote branch
+************************
+      Delete remote branch
+            $ git push -d <remote_name> <branch_name>
+
+      Delete local
+            $ git branch -d <branch_name>
+
+git diff
+********
+      show changes of current files in working directory, compared to latest commit in current branch.
+            $ git diff
+
+      show changes of files which are added by "git add"
+            $ git diff --cached
+
+      show changes between local & remote
+            $ git diff <remote_repository>/<branch>
+
+      show changes of commit_ref2 relative to commit_ref1
+            $ git diff <commit_ref1> <commit_ref2>
+
+      show changes between a commit and its parent
+            $ git diff <commit_ref>^!
+
+      show changes on specific files
+            $ git diff -- paths
+            $ git diff commit_ref1 commit_ref2 -- paths
+            $ git diff commit_ref^! -- paths
+
+
+Create patch based on git
+*************************
+      on a specific commit
+            $ git format-patch -p1 <commit_ref>
+
+      on last 10 commits
+            $ git format-patch -p10 --stdout > file.patch
+
+      * Remark:
+            + -p: not display diffstatus (how many files are changed, added, ...)
+
+Apply patch which created by git
+********************************
+      in your root path of the project
+            $ git apply file.patch
+
+git log
+*******
+      Display information of last commit and earlier
+            $ git log
+      
+      Display information of a specific commit and earlier
+            $ git log commit_ref
+
+      Display information of 2 commit
+            $ git log -2
+
+      Display commits in which a specific file was added
+            $ git log --diff-filter=A -- app/src/main/assets/updates/4.0-50.bin
+
+      Display commits in which a specific file was deleted
+            $ git log --diff-filter=D -- app/src/main/assets/updates/4.0-50.bin
+
+      * Some options of diff-filter:
+            A | a: added
+            D | d: deleted
+            M | d: modified
+            R | r: renamed
+      * Combine options of diff-filter:
+            --diff-filter=AD
+
+git shortlog
+************
+      summary of project
+            $ git shortlog (-sne | --summary --numbered --email)
+
+git revert
+**********     
+      Create a reverting commit for a specific commit:
+            $ git revert <commit_ref>
+
+      Create a reverting commit for a group of commit:
+            $ git revert <commit_group>
+
+      Revert but don't commit automatically
+                  $ git revert --no-commit <commit_ref>
+            or
+                  $ git revert -n commit_ref
+
+      During reverting, conflicts can happen at some commits. The progress will halt at every 
+      conflicting commit. You can 
+
+            cancel reverting and reset everything as before reverting:
+                  $ git revert --abort
+
+            or you can quit reverting but keep successful commits
+                  $ git revert --quit
+            
+            or you can resolve coflicts by yourself. After resolving conflicts, you can continue
+                  $ git revert --continue
+
+            or you can skip the conflicting commit
+                  $ git revert --skip
+
+git reset
+*********
+      Unstage all staged files in index
+            $ git reset
+
+            Explanation:
+                  - default is mixed => don't reset working directory.
+                  - no commit_ref => don't move HEAD
+                  => Only reset the staged index tree.
+
+      Unstage specific stage files in index
+            $ git reset -- paths
+
+      Make staged index tree as same as a specific tree
+            $ git reset <tree> -- paths
+
+      Make all files as last commit
+            $ git reset --hard
+
+      Make all files as a specific commit
+            $ git reset --hard <commit_ref>
+
+      Make all files as a specific branch of a fetched remote repository
+            $ git reset --hard <repo>/<BRANCH>
+
+      Rollback 2 last commit, keep changes in working directory
+            $ git reset HEAD~2
+
+      Rollback 2 last commit in remote repository
+            $ git reset --hard HEAD~2
+            $ git push --force
+
+      * Remarks: 
+            - There are 3 modes:
+                  --soft: only reset local repository; keep changes in local repository and 
+                        working directory.
+
+                  --mixed: default; only reset index tree and local repository; keep changes 
+                        working directory.
+
+                  --hard: reset all.
+            - Cannot do hard reset with paths.
+
+git restore
+***********
+      Restore files on working tree as staged index tree
+            $ git restore [--wortree] -- paths
+      Restore staged index tree as HEAD
+            $ git restore --staged -- paths
+      Restore trees by specific source tree
+            $ git restore [--worktree] [--staged] -s (HEAD | commit_ref | BRANCH) [-- paths]
+
+make your project as same as remote
+***********************************
+      - Do 2 steps:
+      $ git fetch <remote>
+      $ git reset --hard <remote/branch>
+
+git clean
+*********
+      Preview:
+            $ git clean -n
+
+      Remove all non-ignored directories and files
+            $ git clean -df
+      
+      Remove all ignored directories and files
+            $ git clean -Xdf
+
+      Remove all ignored and non-ignored and directories and files
+            $ git clean -xdf
+
+Discard all untracked files and fold
+***************************
+
+      Do:
+            $ git clean -f
+
+      To remove directories, run 
+            $ git clean -f -d 
+      or    $ git clean -fd
+
+      To remove ignored files, run 
+            $ git clean -f -X 
+      or    $ git clean -fX
+
+      To remove ignored and non-ignored files, run 
+            $ git clean -f -x
+      or    $ git clean -fx
+
+make your project as same as a commit
+*************************************
+      Case 1:
+            - Ex:
+                  $ git checkout bc025d1bb53a5b6a14a9460ab872fbabec998477
+            * Remark: you will be in 'detached HEAD' state.
+
+      Case 2: you changed something in your local repository. You want to dismiss changes
+                  $ git reset --hard <commit_ref>
+            - Ex:
+                  git reset --hard c14809fa
+
+git rebase
+**********
+      $ git rebase <base_branch>
+      Rebase current branch which you have checked out before, on the base branch
+
+      During rebasing, conflicts can happen at some commits. The progress will halt at every 
+      conflicting commit. You can 
+
+            cancel rebasing and reset everything as before rebasing:
+                  $ git rebase --abort
+
+            or you can quit rebasing but keep successful commits
+                  $ git rebase --quit
+            
+            or you can resolve coflicts by yourself. After resolving conflicts, you can continue
+                  $ git rebase --continue
+
+            or you can skip the conflicting commit
+                  $ git rebase --skip
+
+git cherry-pick
+***************
+      - Cherry pick single commit:
+            $ git cherry-pick <commit_ref>
+
+      - Cherry pick a range of commits (older_commit_ref, newer_commit_ref] without older_commit_ref:
+            $ git cherry-pick <older_commit_ref>..<newer_commit_ref>
+
+      - Cherry pick without commiting
+            $ git cherry-pick -n <commit_ref>
+            $ git cherry-pick -n <older_commit_ref>..<newer_commit_ref>
+
+      During cherry-pick, conflicts can happen at some commits. The progress will halt at every 
+      conflicting commit. You can 
+
+            cancel cherry-pick and reset everything as before cherry-pick:
+                  $ git cherry-pick --abort
+
+            or you can quit reverting but keep successful commits
+                  $ git cherry-pick --quit
+            
+            or you can resolve coflicts by yourself. After resolving conflicts, you can continue
+                  $ git cherry-pick --continue
+
+            or you can skip the conflicting commit
+                  $ git cherry-pick --skip
+
+Search for commit message
+*************************
+            $ git log --all --grep='To avoid above issue validate the assoc response IEs length'
+      or
+            $ git rev-parse :/"validate this value before using it to allocate"
+            => Show commit id.
+      or
+            git show :/"validate this value before using it to allocate"
+            => Display changes
+
+Search for branches which contain a commit based on commit id
+*************************************************************
+      $ git branch -a --contains df541cea94d83533ff8f34a9b8ae77964788b1c7 
+
+Check changes in a file
+***********************
+      File history of COMMITS
+            $ git log -- <file>
+      
+      File history of COMMITS with DIFFS
+            $ git log -p -- <file>
+
+      File history of COMMITS with DIFFS including RENAMES
+            $ git log --follow -p -- <file>
+
+      * If you want search in all branches, add option: --all
+
+Check time every code line was added/modified
+*********************************************
+      Use following command
+            $ git blame file.cpp > path.txt
+      Then check the file "path.txt"
+
+
+Find a commit which added a code line
+*************************************
+      git log -S "mention here line of code" [file-path] 
+
+Change url of remote repo (Ex: origin)
+**************************************
+      git remote set-url origin ssh://NhatVTM@tfs.vsmart.net:22/vsmart/E-COCKPIT/_git/tbox_source
+
+
+Remove a merged local commit
+****************************
+      Method 1:
+            git reset --hard commit_sha
+
+      There's also another way:
+            git reset --hard HEAD~1
+
+      It will get you back 1 commit.
+
+
+git stash commands
+******************
+      - simple stashing
+            $ git stash
+
+      - stash and write a message
+            $ git stash save "my message"
+
+      - stash even untracked files:
+            $ git stash -u
+
+      - add untracked files and stash:
+            $ git add .
+            $ git stash save "my message"
+
+      - List your stashings:
+            $ git stash list
+            => For example of output:
+                  stash@{0}: On master: my message
+                  stash@{1}: WIP on master: 5002d47 our new homepage
+                  stash@{2}: WIP on master: 5002d47 our new homepage
+
+      - Get a stash from your stack:
+            $ git stash apply stash@{0}
+
+      - Get a stash and remove it from your stack:
+            $ git stash pop stash@{0}
+
+      - Delete a stash:
+            $ git stash drop stash@{1}
+
+      - Delete all stashes:
+            $ git stash clear
+
+Blame
+*****
+      - Check information of current change in line 587:
+            git blame -L 587,+1 file.cpp
+
+      - Check information of change in line 587 at <commit_ref>
+            git blame -L 587,+1 commit_ref file.cpp
+
+
+
+
+======================================================================================================
+            SOME GIT LOG
+
+      git log --after="2013-11-11" --before="2013-11-12"
+      git log --since="2013-11-11" --until="2013-11-12"
+
+      git log --since="2013-11-12 00:00" --before="2013-11-12 23:59"

@@ -1,0 +1,29 @@
+Reference
+*********
+    https://stackoverflow.com/questions/4991594/revert-a-range-of-commits-in-git
+
+How to do
+*********
+
+    - Reverting multiple commits in only supported in Git1.7.2+: s
+
+    Revert & commit immediately
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        - Revert range (OLDER_COMMIT, NEWER_COMMIT] without commit_ref1
+            $ git revert OLDER_COMMIT, NEWER_COMMIT
+
+        - Revert range [OLDER_COMMIT, NEWER_COMMIT] including commit_ref1
+            $ git revert OLDER_COMMIT^, NEWER_COMMIT
+
+    Revert without committing
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+        - Revert range (OLDER_COMMIT, NEWER_COMMIT] without commit_ref1 
+            $ git revert -n OLDER_COMMIT, NEWER_COMMIT
+
+        - Revert range (OLDER_COMMIT, NEWER_COMMIT) including commit_ref1 
+            $ git revert -n OLDER_COMMIT^, NEWER_COMMIT
+
+Explanation
+***********
+    B^ means "the first parent commit of B": that allows to include B in the revert.
+

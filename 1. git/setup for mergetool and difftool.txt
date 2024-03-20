@@ -1,0 +1,15 @@
+    - Assume that you want to set up "meld" as your merge tool & diff tool.
+
+        $ git config --global --edit
+
+    - Edit your global settings, add the followings:
+
+        [merge]
+            tool = meld
+        [diff]
+            tool = meld
+
+    - Your following commands to use them:
+
+        $ git mergetool [--dir-diff]
+        $ git difftool [commit_ref1 commit_ref2 | commit_ref^!] [--dir-diff]

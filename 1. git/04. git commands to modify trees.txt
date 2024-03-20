@@ -1,0 +1,12 @@
+Copy contents from working tree to index tree:
+Stage changes in working tree:
+    $ git add .
+
+Unstage
+    $ git reset -- .
+    $ git restore --staged -- .
+
+Copy contents from index tree to working tree:
+Remove changes in working tree since last 'git add':
+    $ git checkout -- .
+    $ git restore [--worktree] -- .

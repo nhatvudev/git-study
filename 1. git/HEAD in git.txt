@@ -1,0 +1,5 @@
+https://stackoverflow.com/questions/2304087/what-is-head-in-git
+
+HEAD can point to any commit, it does not need to be the last commit in any branch. (When HEAD points to a commit that is not the last commit in a branch, that is a "detached HEAD"
+
+When you switch branches with git checkout, the HEAD revision changes to point to the tip of the new branch

@@ -1,0 +1,16 @@
+Reference
+*********
+    https://stackoverflow.com/questions/1994463/how-to-cherry-pick-a-range-of-commits-and-merge-them-into-another-branch
+
+How to do
+*********
+
+    - Git 1.7.2+ introduced the ability to cherry-pick a range of commits 
+    
+    - Cherry pick range (OLDER_COMMIT, NEWER_COMMIT] -> without commit_ref1:
+        $ git cherry-pick OLDER_COMMIT..NEWER_COMMIT
+
+    - Cherry pick range [OLDER_COMMIT, NEWER_COMMIT], including commit_ref1:
+        $ git cherry-pick OLDER_COMMIT^..NEWER_COMMIT
+
+    

@@ -1,0 +1,37 @@
+https://stackoverflow.com/questions/2613903/does-deleting-a-branch-in-git-remove-it-from-the-history
+
+Branches are just pointers to commits in git. In git each commit has a complete 
+source tree, it is a very different structure from svn where all branches and 
+tags (by convention) live in separate 'folders' of the repository alongside the 
+special 'trunk'.
+
+If the branch was merged into another branch before it was deleted then all of 
+the commits will still be reachable from the other branch when the first branch 
+is deleted. They remain exactly as they were.
+
+If the branch is deleted without being merged into another branch then the 
+commits in that branch (up until the point where the forked from a commit that 
+is still reachable) will cease to be visible.
+
+The commits will still be retained in the repository and it is possible to 
+recover them immediately after the delete, but eventually they will be garbage 
+collected.
+
+
+
+===========================================================================
+https://www.freecodecamp.org/news/how-to-delete-a-git-branch-both-locally-and-remotely/
+
+Deleting a branch LOCALLY
+
+Git will not let you delete the branch you are currently on so you must make 
+sure to checkout a branch that you are NOT deleting. For example: git checkout 
+main
+
+Delete a branch with git branch -d <branch>.
+
+For example: git branch -d fix/authentication
+
+The -d option will delete the branch only if it has already been pushed and 
+merged with the remote branch. Use -D instead if you want to force the branch 
+to be deleted, even if it hasn't been pushed or merged yet.

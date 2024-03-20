@@ -1,0 +1,4 @@
+Commit ID: http://gitlab.vsmart.net/security/VPrivateSpace/-/commit/2b56679846957ed7ab7a136ab91a9763c5b99bf0
+Cause: Not make the buttons float above keyboard ago.
+Solution: set android:windowSoftInputMode="adjustResize"
+Fixed version: app PS version 1.1.8

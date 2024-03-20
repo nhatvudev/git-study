@@ -1,0 +1,11 @@
+2 following commands are equivalent to each others
+    git remote update <repo>
+    git fetch <repo>
+
+    => fetch all branchs on <repo>
+
+2 following commands are equivalent to each others
+    git remote update
+    git fetch --all
+
+    => fetch all branchs on all remote repositories.

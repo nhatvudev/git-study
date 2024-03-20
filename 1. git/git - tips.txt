@@ -1,0 +1,57 @@
+1. Problem 1
+************
+    - Problem: For following part of a commit message:
+            "UDP IPv6 packets auto flowlabels are using a 32bit secret"
+        a) Look for all commits which contains above part in commit message.
+        b) Look for all branches which contains the commits.
+
+    - Solution:
+        a) Use following command
+            git log --all --grep="UDP IPv6 packets auto flowlabels are using a 32bit secret" | grep -B1 "Author: "
+
+        b) After getting the commit ids. Use 2 following commands
+
+$ commits=(aeaf285e8e5904ecaca43c1f1df966fea553b8af \
+4f7bd8bf34c872545cf492fa5fdcc3554fbfa3ff \
+56e48889385a20e60ba5a156d3506903c4c81219 \
+d1d6fe9814223c51e01d0990e0ebba50fc794df4 \
+262266da85f8919e62de06d45958b3febea8b510 \
+2cc34937e21e9935b7c2b408d892dfd0e8010c53 \
+d8e914e0c848f9365cb8cdb35924e83f95cedfe0 \
+91460c9acb7c3087f9cc62dbda84c0343a0e1051 \
+761bf973484335c19180b0819eb97950c82f1da3 \
+0c87fdd8d684dad734d45c35deab2042f4a08dc4 \
+4be0d4cdf650ca9c693489faf4af6690feb8eeea \
+558d2bdad5f6a0dd65ed7ed4f74419e826a97759 \
+a9de6f42e945cdb24b59c7ab7ebad1eba6cb5875 \
+1f94465d13ace2d4610c4eb2b362454ce2a9d87c \
+491cd03f3b44f58f346ec15e2fc958d0def7b5a7 \
+55667441c84fa5e0911a0aac44fb059c15ba6da2)
+
+
+$ for commit in ${commits[@]}; do git branch -r --contains $commit; done
+
+
+
+2. Problem 2
+************
+    - Problem: with the result from problem 1, look for every commit which is contained by any branch which contains "android-4.4-p" in its name.
+
+    - Solution: use following command
+
+$ for commit in ${commits[@]}; do 
+branches=$(git branch -r --contains $commit)
+if [[ $branches == *"android-4.4-p"* ]]; then
+echo $commit
+fi
+done
+
+
+3. Problem 3
+************
+    - Problem: Need to find in which commit a part of code is inserted (Ex: //Run in two different lists to prevent overlap display)
+    - Solution: Get in the project (with valid git), input following command:
+        $ git blame /home/nhatvtm/Desktop/nhap.txt
+
+    Read the "nhap.txt" file, we will see following line:
+c065f55f (MinhBQ2               2020-04-29 16:37:57 +0700 592)         //Run in two different lists to prevent overlap display

@@ -1,0 +1,15 @@
+git checkout
+    - makes HEAD point to a commit in commit history. Without commit_ref, it shall keep HEAD.
+    - makes files in working directory match staged index. If any file doesn't exist in
+        staged index -> no change.
+
+git reset
+    - makes HEAD point to a commit in commit history and remove all commit after that commit in
+            commit history.
+    - There are 3 modes:
+        --soft: keeps working directory and index tree.
+        --mixed (default): keeps working directory, makes index tree match commit history.
+        --hard: makes working directory and index tree match commit history.
+
+git revert
+    - creates a reverting commit.

@@ -1,0 +1,33 @@
+https://stackoverflow.com/questions/14266615/git-repo-wont-get-garbage-collected-after-reset-hard
+
+
+Question
+********
+    I just started playing with Git and was wondering about one specific case:
+
+        I made a heavy commit, by mistake, and even worse I pushed it to the remote 
+        server.
+
+        Now I'm trying to get things back to the way they were, using 
+        'git reset --hard v1.0' and 'git push -f origin master'.
+
+    After doing that things seem OK, but when I look at the repo file size, it's 
+    still as big as my wrong commit. Even if I try git gc to garbage collect, I have 
+    no success. What should I do in that case, if I want to make a destructive change, 
+    on purpose?
+
+
+Answer 1
+********
+    If you type:
+        git reflog
+
+    you will see that your "big commit" is still there. By default, all entries are 
+    kept for 30 days if unreachable, 90 days if reachable (via history).
+
+    You can try and use 'git reflog --expire-unreachable=1.minute' for instance.
+
+Answer 2
+*********
+    git reflog expire --expire=now HEAD <branches which contained said commit>
+    git gc

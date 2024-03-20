@@ -1,0 +1,15 @@
+1. If you face a problem which is related to "tree" when you push code to remote, try adding options --no-thin.
+    error Missing tree
+2. Error
+    Issue: When you input command:
+        git clone https://gitlab.vsmart.net/security/CVE_tools.git
+
+    Following error message shows up:
+
+Cloning into 'CVE_tools'...
+fatal: unable to access 'https://gitlab.vsmart.net/security/CVE_tools.git/': server certificate verification failed. CAfile: /etc/ssl/certs/ca-certificates.crt CRLfile: none
+
+    Solution: Use following command
+         git clone -c http.sslverify=false https://gitlab.vsmart.net/security/CVE_tools.git
+
+

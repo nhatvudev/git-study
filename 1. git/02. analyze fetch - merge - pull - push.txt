@@ -1,0 +1,203 @@
+Overview
+********
+
+    From branch, we can infer
+        - remote repo. E.g:
+                branch.master.remote=origin
+            => origin
+        
+        - remote branch. E.g:
+                branch.master.merge=refs/heads/master
+            => master
+
+    From remote repo, we can infer
+        - url. E.g:
+                $ git config --get remote.origin.url
+                ssh://nhatvtm@bitbucket.org/owner/project_name
+
+        - fetched branches. E.g:
+                $ git config --get remote.origin.fetch
+                +refs/heads/master:refs/remotes/origin/master
+            => fetched branch is master
+
+    If cannot infer a branch, current branch will be used by default.
+
+    If we cannot infer a remote repo, "origin" will be used by default 
+
+git fetch
+*********
+
+    git fetch <remote_repo> <branch>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        - fetch a branch of a certaint remote repo.
+
+    git fetch <remote_repo>
+    ~~~~~~~~~~~~~~~~~~~~~~~
+        - Assume that <remote_repo> is "origin".
+
+        - base on config
+
+            $ git config --get remote.origin.fetch
+            +refs/heads/master:refs/remotes/origin/master
+
+        As you can see, the remote was set to fetch the master branch specifically and only. 
+
+        - To fetch all branches:
+
+            $ git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+            $ git config --get remote.origin.fetch
+            +refs/heads/*:refs/remotes/origin/*
+
+        - By the way, default config is often fetching all branches.
+
+    git fetch <branch>
+    ~~~~~~~~~~~~~~~~~~
+        - Assume that <branch> is "master"
+
+        - Based on config
+            $ git config --edit
+
+        - Assume that you see:
+            branch.master.remote=origin
+            
+        => fetching the branch "master" of remote repo "origin"
+
+        - Without this info in the config => "origin" will be used default remore repo.
+
+    git fetch
+    ~~~~~~~~~
+        - Assume that the current branch is "master"
+
+        - Take a look at the config
+            $ git config --edit
+
+        - Assume that you see:
+            branch.master.remote=origin
+            
+        => the remote repo is "origin".
+
+        - Without this info in the config => "origin" will be used default remore repo.
+
+        - Now, "git fetch" will give the same result as:
+            git fetch <remote_repo>
+
+
+git merge
+*********
+
+    git merge <branch> 
+    ~~~~~~~~~~~~~~~~~~
+        - Merge a local branch to current branch
+
+    git merge <remote_repo>/<ranch> 
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        - Merge a fetched branch to current branch
+
+    git merge
+    ~~~~~~~~~
+        - Assume that the current branch is "master"
+
+        - Take a look at the config
+            $ git config --edit
+
+        - Assume that you see
+            branch.master.remote=origin
+            branch.master.merge=refs/heads/master
+
+        => the upstream branch of your local branch "master" is "origin/master".
+        Pay attention that the upstream branch is a fetched branch.
+
+        - Now, "git merge" will give the same result as
+            $ git merge origin/master
+
+git pull
+********
+
+    Basic syntax
+    ~~~~~~~~~~~~
+        $ git pull [[<remote_repo>] <branch>] [--depth=10 | --unshallow]
+
+    git pull
+    ~~~~~~~~
+        - as same as
+            $ git fetch
+            $ git merge
+
+    git pull <branch>
+    ~~~~~~~~~~~~~~~~~
+        * It will fetch the branch then merge the branch to current branch.
+
+        - First it will do
+            $ git fetch <branch>
+
+        - Assume that the fetched branch is from remote repo "origin", then it will do
+            $ git merge origin/<branch>
+
+    git pull <remote_repo> <branch>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        - as same as
+            $ git fetch <remote_repo> <branch>
+            $ git merge <remote_repo>/<branch>
+
+
+git push
+********
+    Basic syntax
+    ~~~~~~~~~~~~
+                $ git push <remote_repo> <refs>
+
+        - refs = [+][<source_object>:]<destination>
+        - <source_object>: <local_branch> or HEAD (current branch)
+        - <destination>: <local_branch> or a path as "refs/for/BRANCH"
+
+    git push <remote_repo> <local_branch>:<remote_branch>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        - Push "local_branch" to <remote_branch> of <remote_repo>.
+
+        - If "local_branch" and "remote_name" have same name only write a name:
+            $ git push <remote_repo> <branch>
+            $ git push <branch>
+
+        - if <remote_repo> is missing, we can deduce it by config. Assume that your
+        local_branch is "master". Try
+            $ git config --edit
+
+        - If you see
+            branch.master.remote=origin
+        
+        => the remote_repo is origin.
+
+    git push
+    ~~~~~~~~
+        - Assume that the current branch is 'master'.
+
+        - It will do as same as
+            $ git push master
+
+
+    git push [-u] <remote_repo> <local_branch>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        - Push <local_branch> to its upstream branch in <remote_repo>.
+
+        - We can check the upstream branch by
+            $ git config --edit
+            
+        Assume that the local branch is "master" we can see
+            branch.master.merge=refs/heads/master
+
+        - If no upstream branch is set up, and the remote_repo doesn't have any branch
+        with the same name as <local_branch>, we can use "-u" to push <local_branch> to
+        <remote_repo>. It will set <remote_repo>/<local_branch> as upstream branch of
+        <local_branch>
+
+        - If there is no upstream branch yet, we can set up an upstream branch by
+            $ git branch [<local_branch>] -u <remote_repo>/<remote_branch>
+
+    git push <remote_repo> <refs>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        - Instead of pushing the current branch to the upstream branch which is set up 
+        in the config. We can push current branch to a remote branch directory.
+
+        - E.g:
+            $ git push origin HEAD:refs/for/master

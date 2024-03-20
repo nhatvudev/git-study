@@ -1,0 +1,5 @@
+https://stackoverflow.com/questions/6860893/git-fetch-and-pull-with-no-arguments
+
+Often people use git pull without giving any parameter. Traditionally, this has been 
+equivalent to saying git pull origin. However, when configuration branch.<name>.remote 
+is present while on branch <name>, that value is used instead of origin.

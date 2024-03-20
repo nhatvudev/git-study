@@ -1,0 +1,18 @@
+Add submodule to your main repository
+    $ git submodule add <url> [<submodule_name>]
+
+    * Remark:
+        - your submodule name shall be as same as folder name which contains submodule.
+
+Remove submodule from your main 
+    $ git submodule deinit <submodule_name>
+    $ git rm <submodule_name>
+
+Checkout a specific commit of submodule
+    $ cd [<submodule_name>]
+    $ git checkout <commit_ref>
+
+Init/Reset submodule to a submodule commit which is associated to current main git commit
+    - At you main repository folder:
+        $ git submodule update --init
+
